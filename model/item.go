@@ -3,8 +3,8 @@ package model
 type Item struct {
 	Id          int
 	Name        string
-	Price       string
+	Price       int
 	Description string
-	Sold        string
-	Rating      string
+	Sold        int
+	Rating      int
 }

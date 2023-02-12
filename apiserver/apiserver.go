@@ -29,35 +29,3 @@ func newDB(DatabaseURL string) (*sql.DB, error) {
 
 	return db, nil
 }
-
-//func (s *APIServer) configureRouter() {
-//	s.router.HandleFunc("/home/", s.handleHome())
-//}
-//
-//func (s *APIServer) handleHome() http.HandlerFunc {
-//	return func(w http.ResponseWriter, r *http.Request) {
-//		io.WriteString(w, "home")
-//	}
-//}
-
-//
-//func  Start() error {
-//	s.configureRouter()
-//	err := s.configureStore()
-//	if err != nil {
-//		return err
-//	}
-//	return http.ListenAndServe(s.config.Port, s.router)
-//}
-//
-//func (s *APIServer) configureStore() error {
-//
-//	st := db.New(s.config.Store)
-//	err := st.Open()
-//	if err != nil {
-//		return err
-//	}
-//	s.store = st
-//	return nil
-//}
-//

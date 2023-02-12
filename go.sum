@@ -1,5 +1,7 @@
 github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230212121310-b25de46c838d h1:+nojs1N0AEAMUSTSPIsrObscSpfbPnwn11j7LMKcq4w=
 github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230212121310-b25de46c838d/go.mod h1:kUbDPpbjwamq8QUdAhhi7sE7cZqfWMG3epy5Bs3rbG0=
+github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230212124511-3e7661898800 h1:CvW+ZkyQI/WB6dyFQmiXqHNRGknQZSGs234jVssv92c=
+github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230212124511-3e7661898800/go.mod h1:kUbDPpbjwamq8QUdAhhi7sE7cZqfWMG3epy5Bs3rbG0=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/lib/pq v1.10.7 h1:p7ZhMD+KsSRozJr34udlUrhboJwWAgCg34+/ZZNvZZw=

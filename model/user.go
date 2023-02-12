@@ -7,6 +7,7 @@ type User struct {
 	Email             string
 	Password          string
 	EncryptedPassword string
+	IsSeller          bool
 }
 
 func (u *User) BeforeCreate() error {

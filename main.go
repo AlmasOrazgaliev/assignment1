@@ -13,9 +13,9 @@ func main() {
 		Password: "password",
 	}
 	fmt.Println(u.BeforeCreate(), u)
+
 	config := apiserver.NewConfig()
-	s := apiserver.New(config)
-	if err := s.Start(); err != nil {
+	if err := apiserver.Start(config); err != nil {
 		log.Fatal(err)
 	}
 }

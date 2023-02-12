@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+
+font-family: Arial, Helvetica, sans-serif;
+}
+h1{
+color:blue;
+margin-bottom: -15px;
+}
+.info p{
+font-size: 25px;
+}
+.main{
+font-size: 25px;
+height: 90vh;
+width: 100%;
+background-color:#f0f2f5 ;
+}
+.reg{
+box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+padding-top: 12px;
+padding-left: 15px;
+padding-right: 17px;
+padding-bottom: 12px;
+text-align: center;
+height: 300px;
+width: 340px;
+border-radius: 10px;
+background-color: white;
+left: 38%;
+top: 150px;
+position: absolute;
+}
+#email{
+font-size: 16px;
+margin-top: 7px;
+margin-bottom: 15px;
+border-radius: 7px;
+border-width: 0.5px;
+border-color: gainsboro;
+width: 95%;
+height: 40px;
+padding-left: 12px;
+}
+#password{
+font-size: 16px;
+margin-bottom: 15px;
+border-radius: 7px;
+border-width: 0.5px;
+border-color: gainsboro;
+width: 95%;
+height: 40px;
+padding-left: 12px;
+}
+.recovery{
+margin-top: 5px;
+}
+.forgot{
+font-size: 13px;
+color: rgb(70, 70, 255);
+text-decoration: none;
+}
+.forgot:hover{
+text-decoration: underline;
+}
+.in{
+font-size: 20px;
+font-weight: 600;
+width: 100%;
+height: 50px;
+border-radius: 5px;
+border-color: transparent;
+background-color: rgb(70, 70, 255);
+color: white;
+}
+.line{
+margin-top: 20px;
+}
+.create{
+font-size: 18px;
+margin-top: 7px;
+width: 70%;
+height: 50px;
+border-color: transparent;
+border-radius: 7px;
+border: 0;
+background-color:rgb(24, 185, 24);
+color: white;
+}
+.for_seleb{
+text-align: center;
+font-size: 14px;
+position: absolute;
+left: 43%;
+top: 480px;
+}
+.for_seleb a{
+text-decoration: none;
+color:black;
+font-weight: 700;
+}
+.for_seleb a:hover{
+text-decoration: underline;
+}
+.refs{
+width: 60%;
+position: relative;
+left: 20%;
+margin-top: 20px;
+word-spacing: 10px;
+}
+.refs hr{
+margin-top: 10px;
+margin-bottom: 10px;
+}
+.refs a{
+text-decoration: none;
+color: rgb(96, 96, 96);
+font-size: 12px;
+}
+.refs a:hover{
+text-decoration: underline;
+}
+    </style>
+    
+</head>
+<body>
+    <div class="main">
+        <div class="reg">
+            <form action="/home/" class="sign_in" method="post">
+                <div><input type="email" name="email" id="email" placeholder="Электронный адрес"></div>
+                <div><input type="password" name="password" id="password" placeholder="Пароль"></div>
+                <div><button class="in">Вход</button></div>
+                
+            </form>
+            <hr size="1px" color="grey" noshade class="line">
+            <form action="/create/">
+                <div><button class="create">Создать аккаунт</button></div>
+            </form>
+        </div>
+        <div class="for_seleb">
+            <p><a href="/seller/">Создать аккаунт </a> для продажи.</p>
+        </div>
+    </div>
+</body>
+</html>

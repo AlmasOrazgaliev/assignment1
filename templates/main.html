@@ -1,0 +1,12 @@
+{{ define "main" }}
+{{ template "header" }}
+<div>
+    {{ range . }}
+    <div>
+        <h2>{{ .Name }}</h2>
+        <h3>{{ .Price }}</h3>
+        <a href="/items/{{ .Id}}">More</a>
+    </div>
+    {{end}}
+</div>
+{{ end }}

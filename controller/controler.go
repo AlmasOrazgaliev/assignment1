@@ -38,7 +38,7 @@ func (c *Controller) FindUser(email string, password string) (*model.User, error
 	).Scan(
 		&u.Id,
 		&u.Email,
-		&u.EncryptedPassword,
+		&u.Password,
 	); err != nil {
 		return nil, err
 	}
@@ -78,8 +78,40 @@ func (c *Controller) SearchByPrice(min int, max int) []model.Item {
 	items := c.AllItems()
 	var sorted []model.Item
 	for _, item := range items {
-		if item.Rating/item.Sold >= min && item.Rating/item.Sold <= max {
-
+		if item.Price >= min && item.Price <= max {
+			sorted = append(sorted, item)
 		}
 	}
+	return sorted
+}
+
+func (c *Controller) SearchByRating(min float64, max float64) []model.Item {
+	items := c.AllItems()
+	var sorted []model.Item
+	for _, item := range items {
+		rating := float64(item.Rating / item.Sold)
+		if rating >= min && rating <= max {
+			item.Rating = rating
+			sorted = append(sorted, item)
+		}
+	}
+	return sorted
+}
+
+func (c *Controller) SearchByName(name string) []model.Item {
+	var items []model.Item
+	items = []model.Item{}
+	rows, err := c.DB.Query("SELECT * FROM items WHERE name LIKE '%'$'%'", name)
+	if err != nil {
+		panic(err)
+	}
+	for rows.Next() {
+		item := model.Item{}
+		err = rows.Scan(&item.Id, &item.Name, &item.Price, &item.Description, &item.Sold, &item.Rating)
+		if err != nil {
+			panic(err)
+		}
+		items = append(items, item)
+	}
+	return items
 }

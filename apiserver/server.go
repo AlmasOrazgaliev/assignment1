@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
 type server struct {
@@ -35,6 +36,9 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/save_user/", s.handleSaveUser())
 	s.router.HandleFunc("/publish/", s.handlePublishItem())
 	s.router.HandleFunc("/save_item/", s.handleSaveItem())
+	s.router.HandleFunc("/by_price/", s.handleSearchByPrice())
+	s.router.HandleFunc("/search/", s.handleSearchByName())
+	s.router.HandleFunc("/by_rating/", s.handleSearchByRating())
 }
 
 func (s *server) handleHome() http.HandlerFunc {
@@ -154,12 +158,73 @@ func (s *server) handleSaveItem() http.HandlerFunc {
 		if err != nil {
 			panic(err)
 		}
+		price, err := strconv.Atoi(r.FormValue("price")) ////////////////////////////////////////////////////////////////
 		item := model.Item{
 			Name:        r.FormValue("name"),
-			Price:       r.FormValue("price"),
+			Price:       price,
 			Description: r.FormValue("description"),
 		}
 		err = s.controller.CreateItem(&item)
 		http.Redirect(w, r, "/home/", http.StatusFound)
+	}
+}
+
+func (s *server) handleSearchByPrice() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		html, err := template.ParseFiles("templates/home.html", "templates/main.html")
+		if err != nil {
+			panic(err)
+		}
+		err = r.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+		min, err := strconv.Atoi(r.FormValue("min"))
+		if err != nil {
+			panic(err)
+		}
+		max, err := strconv.Atoi(r.FormValue("max"))
+		items := s.controller.SearchByPrice(min, max)
+		html.ExecuteTemplate(w, "main", items)
+	}
+}
+
+func (s *server) handleSearchByRating() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		html, err := template.ParseFiles("templates/home.html", "templates/main.html")
+		if err != nil {
+			panic(err)
+		}
+		err = r.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+		min, err := strconv.ParseFloat(r.FormValue("min"), 64)
+		if err != nil {
+			panic(err)
+		}
+		max, err := strconv.ParseFloat(r.FormValue("max"), 64)
+		items := s.controller.SearchByRating(min, max)
+		html.ExecuteTemplate(w, "main", items)
+	}
+}
+
+func (s *server) handleSearchByName() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		html, err := template.ParseFiles("templates/home.html", "templates/main.html")
+		if err != nil {
+			panic(err)
+		}
+		err = r.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+		err = r.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+		name := r.FormValue("search")
+		items := s.controller.SearchByName(name)
+		html.ExecuteTemplate(w, "main", items)
 	}
 }

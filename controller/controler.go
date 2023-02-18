@@ -21,9 +21,9 @@ func (c *Controller) CreateUser(u *model.User) error {
 	//	return err
 	//}
 	_, err := c.DB.Exec(
-		"INSERT INTO users (email,password,is_seller) VALUES ($1,$2)",
+		"INSERT INTO users (email,password,is_seller) VALUES ($1,$2,$3)",
 		u.Email,
-		u.EncryptedPassword,
+		u.Password,
 		u.IsSeller,
 	)
 	return err
@@ -72,6 +72,14 @@ func (c *Controller) AllItems() []model.Item {
 		panic(err)
 	}
 	return items
+}
+
+func (c *Controller) ModeratedItems() []model.Item{
+	var items []model.Item
+	all := c.AllItems();
+	for item,_:=range all{
+		if item.mode
+	}
 }
 
 func (c *Controller) SearchByPrice(min int, max int) []model.Item {

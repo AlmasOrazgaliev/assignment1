@@ -7,4 +7,6 @@ type Item struct {
 	Description string
 	Sold        float64
 	Rating      float64
+	Moderated   bool
+	Seller_id   int
 }

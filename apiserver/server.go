@@ -39,6 +39,7 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/by_price/", s.handleSearchByPrice())
 	s.router.HandleFunc("/search/", s.handleSearchByName())
 	s.router.HandleFunc("/by_rating/", s.handleSearchByRating())
+	s.router.HandleFunc("/admin_mode")
 }
 
 func (s *server) handleHome() http.HandlerFunc {
@@ -226,5 +227,11 @@ func (s *server) handleSearchByName() http.HandlerFunc {
 		name := r.FormValue("search")
 		items := s.controller.SearchByName(name)
 		html.ExecuteTemplate(w, "main", items)
+	}
+}
+
+func (s *server) handleAdminMode() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
 	}
 }

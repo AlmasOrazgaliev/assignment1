@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  {{ range. }}
+  <div>
+    <h2>{{ .Name }}</h2>
+    <h3>{{ .Price }}</h3>
+    <h3>{{ .Rating }}</h3>
+    <a href="/items/{{ .Id}}">More</a>
+  </div>
+{{ end }}
+</body>
+</html>

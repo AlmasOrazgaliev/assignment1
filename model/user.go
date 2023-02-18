@@ -10,6 +10,7 @@ type User struct {
 	Password          string
 	EncryptedPassword string
 	IsSeller          bool
+	IsAdmin           bool
 }
 
 func (u *User) BeforeCreate() error {

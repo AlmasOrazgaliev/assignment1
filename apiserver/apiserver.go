@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"database/sql"
+	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 	"net/http"
 )
@@ -12,8 +13,8 @@ func Start(config *Config) error {
 		return err
 	}
 	defer db.Close()
-	srv := newServer(db)
-
+	sessionStore := sessions.NewCookieStore([]byte("Test"))
+	srv := newServer(db, sessionStore)
 	return http.ListenAndServe(config.Port, srv)
 }
 

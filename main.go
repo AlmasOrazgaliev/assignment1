@@ -13,7 +13,7 @@ func main() {
 		Password: "password",
 	}
 	fmt.Println(u.BeforeCreate(), u)
-
+	fmt.Println(4 / 3)
 	config := apiserver.NewConfig()
 	if err := apiserver.Start(config); err != nil {
 		log.Fatal(err)

@@ -5,8 +5,8 @@ type Item struct {
 	Name        string
 	Price       int
 	Description string
-	Sold        float64
-	Rating      float64
+	Sold        int
+	Rating      int
 	Moderated   bool
 	Seller_id   int
 }

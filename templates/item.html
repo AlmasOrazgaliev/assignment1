@@ -1,0 +1,15 @@
+{{ define "item" }}
+{{ template "header" }}
+<div>
+  <div>
+    <h2>{{ .Name }}</h2>
+    <h3>{{ .Price }}</h3>
+    <h3>{{ .Rating }}</h3>
+    <h3>{{ .Description }}</h3>
+    <form action="/items/{{.Id}}/getRating/" method="post">
+      <input type="number" name="rating" placeholder="Give rating">
+      <button type="submit">Add</button>
+    </form>
+  </div>
+</div>
+{{ end }}

@@ -16,11 +16,11 @@ func New(db *sql.DB) *Controller {
 }
 
 func (c *Controller) CreateUser(u *model.User) error {
-	//err := u.BeforeCreate()
-	//if err != nil {
-	//	return err
-	//}
-	_, err := c.DB.Exec(
+	err := u.BeforeCreate()
+	if err != nil {
+		return err
+	}
+	_, err = c.DB.Exec(
 		"INSERT INTO users (email,password,is_seller) VALUES ($1,$2,$3)",
 		u.Email,
 		u.Password,
@@ -29,12 +29,12 @@ func (c *Controller) CreateUser(u *model.User) error {
 	return err
 }
 
-func (c *Controller) FindUser(email string, password string) (*model.User, error) {
-	u := &model.User{}
+func (c *Controller) FindUser(u *model.User) (*model.User, error) {
+	u.BeforeCreate()
 	if err := c.DB.QueryRow(
 		"SELECT id, email, password FROM users WHERE email=$1 AND password=$2",
-		email,
-		password,
+		u.Email,
+		u.EncryptedPassword,
 	).Scan(
 		&u.Id,
 		&u.Email,
@@ -52,6 +52,14 @@ func (c *Controller) CreateItem(item *model.Item) error {
 		item.Description)
 	return err
 }
+
+func (c *Controller) UpdateItem(item *model.Item) error {
+	_, err := c.DB.Exec("UPDATE items SET rating=$1,sold=sold+1 WHERE id=$2",
+		item.Rating,
+		item.Id)
+	return err
+}
+
 func (c *Controller) AllItems() []model.Item {
 	var items []model.Item
 	items = []model.Item{}
@@ -74,12 +82,36 @@ func (c *Controller) AllItems() []model.Item {
 	return items
 }
 
-func (c *Controller) ModeratedItems() []model.Item{
-	var items []model.Item
-	all := c.AllItems();
-	for item,_:=range all{
-		if item.mode
+func (c *Controller) GetById(id int) model.Item {
+	all := c.AllItems()
+	for _, item := range all {
+		if item.Id == id {
+			return item
+		}
 	}
+	return model.Item{}
+}
+
+func (c *Controller) ModeratedItems() []model.Item {
+	var items []model.Item
+	all := c.AllItems()
+	for _, item := range all {
+		if item.Moderated {
+			items = append(items, item)
+		}
+	}
+	return items
+}
+
+func (c *Controller) NotModeratedItems() []model.Item {
+	var items []model.Item
+	all := c.AllItems()
+	for _, item := range all {
+		if !item.Moderated {
+			items = append(items, item)
+		}
+	}
+	return items
 }
 
 func (c *Controller) SearchByPrice(min int, max int) []model.Item {
@@ -93,11 +125,11 @@ func (c *Controller) SearchByPrice(min int, max int) []model.Item {
 	return sorted
 }
 
-func (c *Controller) SearchByRating(min float64, max float64) []model.Item {
+func (c *Controller) SearchByRating(min int, max int) []model.Item {
 	items := c.AllItems()
 	var sorted []model.Item
 	for _, item := range items {
-		rating := float64(item.Rating / item.Sold)
+		rating := item.Rating / item.Sold
 		if rating >= min && rating <= max {
 			item.Rating = rating
 			sorted = append(sorted, item)

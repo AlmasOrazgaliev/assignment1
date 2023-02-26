@@ -8,7 +8,6 @@ import (
 	"github.com/AlmasOrazgaliev/assignment1/model"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -37,13 +36,13 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/items/", s.handleItems())
 	s.router.HandleFunc("/signin", s.handleSignIn())
 	s.router.HandleFunc("/signup", s.handleSignUp())
-	s.router.HandleFunc("/createItem", s.handleCreateItem()) //
-	s.router.HandleFunc("/by_price/", s.handleSearchByPrice())
-	s.router.HandleFunc("/search/", s.handleSearchByName())
-	s.router.HandleFunc("/by_rating/", s.handleSearchByRating())
-	s.router.HandleFunc("/admin_mode/", s.handleAdminMode())
+	s.router.HandleFunc("/createItem", s.handleCreateItem())
+	s.router.HandleFunc("/items/by_price", s.handleSearchByPrice())
+	s.router.HandleFunc("/items/search/", s.handleSearchByName())
+	s.router.HandleFunc("/items/by_rating/", s.handleSearchByRating())
+	//s.router.HandleFunc("/admin_mode/", s.handleAdminMode())
 	s.router.HandleFunc("/items/{id:[0-9]+}", s.handleItemsId())
-	s.router.HandleFunc("/items/{id:[0-9]+}/getRating/", s.handleGetRating()) //
+	s.router.HandleFunc("/items/{id:[0-9]+}/updateRating/", s.handleUpdateRating()) //
 	//s.router.HandleFunc("/admin_mode/")
 }
 
@@ -107,8 +106,8 @@ func (s *server) handleCreateItem() http.HandlerFunc {
 
 func (s *server) handleSearchByPrice() http.HandlerFunc {
 	type minMax struct {
-		min int `json:"min"`
-		max int `json:"max"`
+		Min int `json:"min"`
+		Max int `json:"max"`
 	}
 	return func(w http.ResponseWriter, r *http.Request) {
 		mm := minMax{}
@@ -116,7 +115,7 @@ func (s *server) handleSearchByPrice() http.HandlerFunc {
 		if err != nil {
 			errResponse(w, http.StatusBadRequest, err)
 		}
-		items := s.controller.SearchByPrice(mm.min, mm.max)
+		items := s.controller.SearchByPrice(mm.Min, mm.Max)
 		if items != nil {
 			response(w, http.StatusFound, items)
 		} else {
@@ -127,8 +126,8 @@ func (s *server) handleSearchByPrice() http.HandlerFunc {
 
 func (s *server) handleSearchByRating() http.HandlerFunc {
 	type minMax struct {
-		min int `json:"min"`
-		max int `json:"max"`
+		Min int `json:"min"`
+		Max int `json:"max"`
 	}
 	return func(w http.ResponseWriter, r *http.Request) {
 		mm := minMax{}
@@ -136,7 +135,7 @@ func (s *server) handleSearchByRating() http.HandlerFunc {
 		if err != nil {
 			errResponse(w, http.StatusBadRequest, err)
 		}
-		items := s.controller.SearchByRating(mm.min, mm.max)
+		items := s.controller.SearchByRating(mm.Min, mm.Max)
 		if items != nil {
 			response(w, http.StatusFound, items)
 		} else {
@@ -146,64 +145,70 @@ func (s *server) handleSearchByRating() http.HandlerFunc {
 }
 
 func (s *server) handleSearchByName() http.HandlerFunc {
+	type Name struct {
+		Name string `json:"name"`
+	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		html, err := template.ParseFiles("templates/home.html", "templates/main.html")
+		name := Name{}
+		err := json.NewDecoder(r.Body).Decode(&name)
 		if err != nil {
-			panic(err)
+			errResponse(w, http.StatusBadRequest, err)
 		}
-		err = r.ParseForm()
-		if err != nil {
-			panic(err)
+		items := s.controller.SearchByName(name.Name)
+		if items != nil {
+			response(w, http.StatusFound, items)
+		} else {
+			errResponse(w, http.StatusNotFound, errors.New("no such items"))
 		}
-		err = r.ParseForm()
-		if err != nil {
-			panic(err)
-		}
-		name := r.FormValue("search")
-		items := s.controller.SearchByName(name)
-		html.ExecuteTemplate(w, "main", items)
 	}
 }
 
 func (s *server) handleItemsId() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		html, err := template.ParseFiles("templates/item.html", "templates/home.html")
-		if err != nil {
-			panic(err)
-		}
 		id, err := strconv.Atoi(vars["id"])
 		if err != nil {
-			panic(err)
+			errResponse(w, http.StatusInternalServerError, err)
 		}
-		html.ExecuteTemplate(w, "item", s.controller.GetById(id))
+		item := s.controller.GetById(id)
+		response(w, http.StatusFound, item)
 	}
 }
-func (s *server) handleGetRating() http.HandlerFunc {
+
+func (s *server) handleUpdateRating() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id, err := strconv.Atoi(vars["id"])
 		if err != nil {
-			panic(err)
+			errResponse(w,http.StatusInternalServerError,err)
 		}
 		item := s.controller.GetById(id)
-		rating, _ := strconv.Atoi(r.FormValue("rating"))
-		item.Rating += float64(rating)
-		s.controller.UpdateItem(&item)
-		http.Redirect(w, r, "/home/", http.StatusFound)
+		var rating int
+		err = json.NewDecoder(r.Body).Decode(&rating)
+		if err != nil {
+			errResponse(w, http.StatusBadRequest, err)
+		}
+		item.Rating += rating
+		item.Sold++
+		err = s.controller.UpdateItem(&item)
+		if err != nil {
+			errResponse(w, http.StatusInternalServerError, err)
+		} else {
+			response(w, http.StatusOK, nil)
+		}
 	}
 }
 
-func (s *server) handleAdminMode() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		items := s.controller.NotModeratedItems()
-		html, err := template.ParseFiles("templates/admin.html")
-		if err != nil {
-			panic(err)
-		}
-		html.ExecuteTemplate(w, "admin.html", items)
-	}
-}
+//func (s *server) handleAdminMode() http.HandlerFunc {
+//	return func(w http.ResponseWriter, r *http.Request) {
+//		items := s.controller.NotModeratedItems()
+//		html, err := template.ParseFiles("templates/admin.html")
+//		if err != nil {
+//			panic(err)
+//		}
+//		html.ExecuteTemplate(w, "admin.html", items)
+//	}
+//}
 
 func errResponse(w http.ResponseWriter, code int, err error) {
 	response(w, code, map[string]string{"error": err.Error()})

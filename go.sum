@@ -1,5 +1,7 @@
 github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230218143122-1fc30cd689c1 h1:H13PssQ1TBtmqBmJlUNL7Oko+05a5uINF2EF04TUGY8=
 github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230218143122-1fc30cd689c1/go.mod h1:kUbDPpbjwamq8QUdAhhi7sE7cZqfWMG3epy5Bs3rbG0=
+github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230224152938-91654f7500a9 h1:+7Z9odnwkPqwIN6BOkLjLUWnO7Mo1mH7iO4t80K6eU0=
+github.com/AlmasOrazgaliev/assignment1/model v0.0.0-20230224152938-91654f7500a9/go.mod h1:kUbDPpbjwamq8QUdAhhi7sE7cZqfWMG3epy5Bs3rbG0=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/gorilla/securecookie v1.1.1 h1:miw7JPhV+b/lAHSXz4qd/nN9jRiAFV5FwjeKyCS8BvQ=

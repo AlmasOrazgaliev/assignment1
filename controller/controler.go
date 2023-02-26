@@ -23,7 +23,7 @@ func (c *Controller) CreateUser(u *model.User) error {
 	_, err = c.DB.Exec(
 		"INSERT INTO users (email,password,is_seller) VALUES ($1,$2,$3)",
 		u.Email,
-		u.Password,
+		u.EncryptedPassword,
 		u.IsSeller,
 	)
 	return err
@@ -38,7 +38,7 @@ func (c *Controller) FindUser(u *model.User) (*model.User, error) {
 	).Scan(
 		&u.Id,
 		&u.Email,
-		&u.Password,
+		&u.EncryptedPassword,
 	); err != nil {
 		return nil, err
 	}

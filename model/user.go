@@ -5,12 +5,12 @@ import (
 )
 
 type User struct {
-	Id                int
-	Email             string
-	Password          string
-	EncryptedPassword string
-	IsSeller          bool
-	IsAdmin           bool
+	Id                int    `json:"id"`
+	Email             string `json:"email"`
+	Password          string `json:"password"`
+	EncryptedPassword string `json:"encryptedPassword"`
+	IsSeller          bool   `json:"isSeller"`
+	IsAdmin           bool   `json:"isAdmin"`
 }
 
 func (u *User) BeforeCreate() error {
